@@ -1,22 +1,25 @@
 "use client";
 
-import { Typography, Input, Flex } from "antd";
+import { Typography, Input, Flex, Spin } from "antd";
 import Aurora from "./components/Aurora";
 import TextType from "./components/TextType";
 import { useState } from "react";
+import { PacmanLoader } from "react-spinners";
+import Paragraph from "antd/es/skeleton/Paragraph";
 const { Title } = Typography;
 
 export default function HomePage() {
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
-    function onInputSubmit(value: string) {
-        if (loading) return;
-        setLoading(true);
-        console.log(value);
-        // router.push(`/info?url=${value}`);
-    }
+  function onInputSubmit(value: string) {
+    if (loading) return;
+    setLoading(true);
+    console.log(value);
+    // router.push(`/info?url=${value}`);
+  }
+
   return (
     <div
       style={{
@@ -56,26 +59,64 @@ export default function HomePage() {
           padding: "2rem",
         }}
       >
-        <Title level={1} style={{ marginBottom: "2rem" }}>
-          {<TextType
-            text={["What are we making today?", "Something delicious on your mind?", "Trying something new?"]}
-            typingSpeed={75}
-            pauseDuration={1500}
-            showCursor={true}
-            cursorCharacter="|"
-            />}
-        </Title>
-
-        <Input
-          placeholder="Input recipe URL"
-          size="large"
+        <div
           style={{
+            position: "relative",
             width: "100%",
             maxWidth: "500px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
-          onPressEnter={(e) => onInputSubmit(e.currentTarget.value)}
-        //   onPressEnter={onInputSubmit}
-        />
+        >
+          {/* Loading State */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: loading
+                ? "translate(-50%, -50%) scale(1)"
+                : "translate(-50%, -50%) scale(0.8)",
+              opacity: loading ? 1 : 0,
+              visibility: loading ? "visible" : "hidden",
+              transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
+            }}
+          >
+            <PacmanLoader color="white" size={30} />
+            {/* <Typography.Text type="secondary">Fetching recipe...</Typography.Text> */}
+          </div>
+
+          {/* Content State */}
+          <div
+            style={{
+              opacity: loading ? 0 : 1,
+              visibility: loading ? "hidden" : "visible",
+              transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
+              transform: loading ? "scale(0.95) translateY(-10px)" : "scale(1) translateY(0)",
+              width: "100%",
+            }}
+          >
+            <Title level={1} style={{ marginBottom: "2rem", textAlign: "center" }}>
+              {<TextType
+                text={["What are we making today?", "Something delicious on your mind?", "Trying something new?"]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                showCursor={true}
+                cursorCharacter="|"
+              />}
+            </Title>
+
+            <Input
+              placeholder="Input recipe URL"
+              size="large"
+              style={{
+                width: "100%",
+              }}
+              onPressEnter={(e) => onInputSubmit(e.currentTarget.value)}
+            />
+          </div>
+        </div>
       </Flex>
     </div>
   );
