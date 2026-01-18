@@ -4,23 +4,69 @@ import { Typography, Input, Flex, Spin } from "antd";
 import Aurora from "./components/Aurora";
 import TextType from "./components/TextType";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { PacmanLoader } from "react-spinners";
-import Paragraph from "antd/es/skeleton/Paragraph";
 import ShinyText from "./components/ShinyText";
-import GlassSurface from "./components/GlassSurface";
+import { Recipe } from "@/types/types";
 const { Title } = Typography;
 
 export default function HomePage() {
 
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-
-  function onInputSubmit(value: string) {
+  async function onInputSubmit(value: string) {
     if (loading) return;
     setLoading(true);
-    console.log(value);
-    //const recipe = await scrapeRecipe(value);
-    // router.push(`/info?url=${recipe}`);
+    const recipe: Recipe = {
+      title: "Chicken Parmesan",
+      description: "Recipe Description",
+      ingredients: ["2 1/2 pounds chicken legs", "3/4 cup honey", "1/2 cup soy sauce", "1/4 cup ketchup", "2 cloves garlic"],
+      instructions: [
+        "Preheat oven to 350°F and line pan with foil.",
+        "Arrange chicken legs in pan.",
+        "Mix sauce ingredients.",
+        "Pour sauce over chicken.",
+        "Bake 45 minutes.",
+        "Flip chicken.",
+        "Increase oven to 425°F.",
+        "Bake 15 minutes until caramelized.",
+        "Rest 5 minutes.",
+        "Serve with sauce."
+      ],
+      servings: 4,
+      time: "30 minutes",
+      imageUrl: "https://imgs.search.brave.com/aIuHhKNxYWaj412cwIIFhRX8MBwnGQL4TF_6eVJ1vSg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dmluY2Vuem9zcGxh/dGUuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIxLzEwLzYx/MHgzNTAtUGhvdG8t/M184NTctSG93LXRv/LU1ha2UtQ0hJQ0tF/Ti1QQVJNSUdJQU5B/LUxpa2UtYW4tSXRh/bGlhbi1WMS5qcGc",
+      sourceUrl: "",
+    };
+
+    // Store recipe in sessionStorage and navigate to info page
+    sessionStorage.setItem("recipe", JSON.stringify(recipe));
+    router.push("/info");
+    // try {
+    //   const response = await fetch("/api/scrape", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ url: value }),
+    //   });
+
+    //   if (!response.ok) {
+    //     throw new Error("Failed to scrape recipe");
+    //   }
+
+    //   const recipe: Recipe = await response.json();
+    //   console.log(recipe);
+
+    //   // Store recipe in sessionStorage and navigate to info page
+    //   sessionStorage.setItem("recipe", JSON.stringify(recipe));
+    //   router.push("/info");
+    // } catch (error) {
+    //   console.error("Error scraping recipe:", error);
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   return (
@@ -51,32 +97,6 @@ export default function HomePage() {
           speed={0.5}
         />
       </div>
-      {/* Call to Action Slogan - positioned absolutely so it doesn't affect layout */}
-      <Title
-        style={{
-          position: "absolute",
-          // top: "15%",
-          top: "7rem",
-          left: "50%",
-          transform: loading
-            ? "translateX(-50%) scale(0.95) translateY(-10px)"
-            : "translateX(-50%) scale(1) translateY(0)",
-          textAlign: "center",
-          fontSize: "6rem",
-          fontWeight: 700,
-          color: "white",
-          letterSpacing: "-0.2rem",
-          lineHeight: 1.2,
-          width: "75vw",
-          maxWidth: "75vw",
-          transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
-          opacity: loading ? 0 : 1,
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      >
-        Make a recipe your way
-      </Title>
 
       <Flex
         vertical
@@ -141,6 +161,33 @@ export default function HomePage() {
               alignItems: "center",
             }}
           >
+
+            <Title
+              style={{
+                // position: "absolute",
+                // top: "15%",
+                // top: "9rem",
+                left: "50%",
+                // transform: loading
+                //   ? "translateX(-50%) scale(0.95) translateY(-10px)"
+                //   : "scale(1) translateY(0)",
+                textAlign: "center",
+                fontSize: "6rem",
+                fontWeight: 700,
+                color: "white",
+                letterSpacing: "-0.2rem",
+                lineHeight: 1.2,
+                width: "75vw",
+                maxWidth: "75vw",
+                transition: "opacity 1s ease-in-out, transform 0.5s ease-in-out",
+                opacity: loading ? 0 : 1,
+                // zIndex: 2,
+                pointerEvents: "none",
+              }}
+            >
+              Make a recipe your way
+            </Title>
+
             <Title level={2} style={{ marginBottom: "2rem", textAlign: "center", color: "rgba(255, 255, 255, 0.9)" }}>
               {<TextType
                 text={["What are we making today?", "Something delicious on your mind?", "Trying something new?"]}
