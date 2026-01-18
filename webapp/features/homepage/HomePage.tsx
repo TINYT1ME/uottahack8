@@ -6,6 +6,8 @@ import TextType from "./components/TextType";
 import { useState } from "react";
 import { PacmanLoader } from "react-spinners";
 import Paragraph from "antd/es/skeleton/Paragraph";
+import ShinyText from "./components/ShinyText";
+import GlassSurface from "./components/GlassSurface";
 const { Title } = Typography;
 
 export default function HomePage() {
@@ -17,7 +19,8 @@ export default function HomePage() {
     if (loading) return;
     setLoading(true);
     console.log(value);
-    // router.push(`/info?url=${value}`);
+    //const recipe = await scrapeRecipe(value);
+    // router.push(`/info?url=${recipe}`);
   }
 
   return (
@@ -48,6 +51,33 @@ export default function HomePage() {
           speed={0.5}
         />
       </div>
+      {/* Call to Action Slogan - positioned absolutely so it doesn't affect layout */}
+      <Title
+        style={{
+          position: "absolute",
+          // top: "15%",
+          top: "7rem",
+          left: "50%",
+          transform: loading
+            ? "translateX(-50%) scale(0.95) translateY(-10px)"
+            : "translateX(-50%) scale(1) translateY(0)",
+          textAlign: "center",
+          fontSize: "6rem",
+          fontWeight: 700,
+          color: "white",
+          letterSpacing: "-0.2rem",
+          lineHeight: 1.2,
+          width: "75vw",
+          maxWidth: "75vw",
+          transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
+          opacity: loading ? 0 : 1,
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      >
+        Make a recipe your way
+      </Title>
+
       <Flex
         vertical
         align="center"
@@ -81,10 +111,21 @@ export default function HomePage() {
               opacity: loading ? 1 : 0,
               visibility: loading ? "visible" : "hidden",
               transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.5rem",
             }}
           >
             <PacmanLoader color="white" size={30} />
-            {/* <Typography.Text type="secondary">Fetching recipe...</Typography.Text> */}
+            <ShinyText
+              text="Fetching recipe"
+              shineColor="#b455a3"
+              color="#dcdbdb"
+              speed={1.3}
+              spread={120}
+            />
+            <Typography.Text type="secondary" style={{ color: "rgba(230, 209, 101, 0.57)" }}>Powered by Yellowcake</Typography.Text>
           </div>
 
           {/* Content State */}
@@ -95,9 +136,12 @@ export default function HomePage() {
               transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
               transform: loading ? "scale(0.95) translateY(-10px)" : "scale(1) translateY(0)",
               width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Title level={1} style={{ marginBottom: "2rem", textAlign: "center" }}>
+            <Title level={2} style={{ marginBottom: "2rem", textAlign: "center", color: "rgba(255, 255, 255, 0.9)" }}>
               {<TextType
                 text={["What are we making today?", "Something delicious on your mind?", "Trying something new?"]}
                 typingSpeed={75}
@@ -118,6 +162,6 @@ export default function HomePage() {
           </div>
         </div>
       </Flex>
-    </div>
+    </div >
   );
 }

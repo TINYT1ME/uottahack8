@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ConfigProvider } from "antd";
 import { themeConfig } from "@/config/theme";
+import ThemeBackground from "./ThemeBackground";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CalorieHero",
+  title: "RecipeHero",
   description: "CalorieHero - Input recipe url",
 };
 
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ConfigProvider theme={themeConfig}>
+          <ThemeBackground />
           {children}
         </ConfigProvider>
       </body>

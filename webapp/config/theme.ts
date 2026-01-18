@@ -16,6 +16,7 @@ export const themeConfig: ThemeConfig = {
     colorTextQuaternary: "rgba(255, 255, 255, 0.25)", // Quaternary text
     
     // Background Colors
+    colorBgBase: "#0a0a0a", // Base background color (dark to complement Aurora)
     colorBgContainer: "rgba(255, 255, 255, 0.1)", // Container background (semi-transparent)
     colorBgElevated: "rgba(255, 255, 255, 0.15)", // Elevated container background
     colorBgLayout: "transparent", // Layout background (transparent to show Aurora)
