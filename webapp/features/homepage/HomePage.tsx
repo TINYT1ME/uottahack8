@@ -4,41 +4,58 @@ import { Typography, Input, Flex, Spin } from "antd";
 import Aurora from "./components/Aurora";
 import TextType from "./components/TextType";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { PacmanLoader } from "react-spinners";
-import Paragraph from "antd/es/skeleton/Paragraph";
 import ShinyText from "./components/ShinyText";
-import GlassSurface from "./components/GlassSurface";
+import { Recipe } from "@/types/types";
 const { Title } = Typography;
 
 export default function HomePage() {
 
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
 
   async function onInputSubmit(value: string) {
     if (loading) return;
     setLoading(true);
-    try {
-      const response = await fetch("/api/scrape", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: value }),
-      });
+    const recipe: Recipe = {
+      title: "Chicken Parmesan",
+      description: "Recipe Description",
+      ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
+      instructions: ["Instruction 1", "Instruction 2", "Instruction 3"],
+      servings: 4,
+      time: "30 minutes",
+      imageUrl: "https://picsum.photos/500",
+      sourceUrl: "",
+    };
 
-      if (!response.ok) {
-        throw new Error("Failed to scrape recipe");
-      }
+    // Store recipe in sessionStorage and navigate to info page
+    sessionStorage.setItem("recipe", JSON.stringify(recipe));
+    router.push("/info");
+    // try {
+    //   const response = await fetch("/api/scrape", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ url: value }),
+    //   });
 
-      const recipe = await response.json();
-      console.log(recipe);
-      // router.push(`/info?url=${recipe}`);
-    } catch (error) {
-      console.error("Error scraping recipe:", error);
-    } finally {
-      setLoading(false);
-    }
+    //   if (!response.ok) {
+    //     throw new Error("Failed to scrape recipe");
+    //   }
+
+    //   const recipe: Recipe = await response.json();
+    //   console.log(recipe);
+
+    //   // Store recipe in sessionStorage and navigate to info page
+    //   sessionStorage.setItem("recipe", JSON.stringify(recipe));
+    //   router.push("/info");
+    // } catch (error) {
+    //   console.error("Error scraping recipe:", error);
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   return (
@@ -69,32 +86,6 @@ export default function HomePage() {
           speed={0.5}
         />
       </div>
-      {/* Call to Action Slogan - positioned absolutely so it doesn't affect layout */}
-      {/* <Title
-        style={{
-          position: "absolute",
-          // top: "15%",
-          top: "9rem",
-          left: "50%",
-          transform: loading
-            ? "translateX(-50%) scale(0.95) translateY(-10px)"
-            : "translateX(-50%) scale(1) translateY(0)",
-          textAlign: "center",
-          fontSize: "6rem",
-          fontWeight: 700,
-          color: "white",
-          letterSpacing: "-0.2rem",
-          lineHeight: 1.2,
-          width: "75vw",
-          maxWidth: "75vw",
-          transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
-          opacity: loading ? 0 : 1,
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      >
-        Make a recipe your way
-      </Title> */}
 
       <Flex
         vertical
