@@ -20,7 +20,7 @@ export default function HomePage() {
     setLoading(true);
     const recipe: Recipe = {
       title: "Chicken Parmesan",
-      description: "Recipe Description",
+      description: "A quick and delicious Chicken Parm that will blow your socks off!",
       ingredients: ["2 1/2 pounds chicken legs", "3/4 cup honey", "1/2 cup soy sauce", "1/4 cup ketchup", "2 cloves garlic"],
       instructions: [
         "Preheat oven to 350°F and line pan with foil.",
@@ -41,6 +41,8 @@ export default function HomePage() {
     };
 
     // Store recipe in sessionStorage and navigate to info page
+    // wait 2 seconds
+    await new Promise(resolve => setTimeout(resolve, 3500));
     sessionStorage.setItem("recipe", JSON.stringify(recipe));
     router.push("/info");
     // try {

@@ -1,5 +1,5 @@
 const BASE_URL = process.env.YELLOWCAKE_BASE_URL || "https://api.yellowcake.dev";
-const API_KEY = process.env.YELLOWCAKE_API_KEY || "yc_live__bV8-Xj74PEAU78cC_8e1_1P_aqWGlusouRhJq3FQ78="
+const API_KEY = process.env.YELLOWCAKE_API_KEY || "AIzaSyAoIwdCkCoeFXyEGroGlkJw-fSFDo2sPC0"
 
 if (!API_KEY) throw new Error("Missing YELLOWCAKE_API_KEY in .env");
 

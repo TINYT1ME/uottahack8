@@ -14,7 +14,7 @@ const userInterface = readline.createInterface({
 async function chat() {
   // 3. Ask the user for input
   userInterface.question("\nWhat do you want to ask Gemini? (or type 'exit'): ", async (input) => {
-    
+
     if (input.toLowerCase() === 'exit') {
       userInterface.close();
       return;

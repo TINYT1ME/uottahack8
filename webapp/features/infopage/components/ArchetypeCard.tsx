@@ -27,8 +27,9 @@ export default function ArchetypeCard({ icon, name, preferences, isSelected = fa
         <Card
             onClick={handleClick}
             style={{
-                width: "200px",
-                height: "200px",
+                maxWidth: "100%",
+                maxHeight: "100%",
+                minWidth: "12rem",
                 backgroundColor: isSelected
                     ? "rgba(76, 175, 80, 0.3)"
                     : "rgba(255, 255, 255, 0.1)",

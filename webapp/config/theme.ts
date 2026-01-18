@@ -3,7 +3,7 @@ import type { ThemeConfig } from "antd";
 export const themeConfig: ThemeConfig = {
   token: {
     // Color Palette
-    colorPrimary: "#3A29FF", // Primary brand color
+    colorPrimary: "rgba(54, 151, 75, 1)", // Primary brand color
     colorSuccess: "#52c41a",
     colorWarning: "#faad14",
     colorError: "#ff3232",
