@@ -1,251 +1,303 @@
-"use client";
+// typescript
+                            'use client'
+                            import React from 'react'
+                            import { Recipe } from '../../../types/types'
+                            import { Card } from 'antd'
 
-import { Typography, Image, Tag, Card, Row, Col, Space } from "antd";
-import { ClockCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Recipe } from "@/types/types";
+                            interface Props {
+                                recipe: Recipe
+                                className?: string
+                            }
 
-const { Title } = Typography;
+                            export default function RecipeCard({ recipe, className }: Props) {
+                                const {
+                                    imageUrl = 'https://picsum.photos/800/450',
+                                    title = 'Succulent Mihai Jalbu',
+                                    description = 'Shoutout Mihai Jalbu for being the best TA ever and making Uottahack possible!',
+                                    servings = 4,
+                                    time = '30 mins',
+                                    ingredients = [],
+                                    instructions = [],
+                                } = (recipe || {});
 
-interface RecipeCardProps {
-    recipe: Recipe;
-}
+                                const glassBg = "rgba(255, 255, 255, 0.1)"
+                                const glassBorder = "1px solid rgba(255, 255, 255, 0.2)"
+                                const lightText = "rgba(255,255,255,0.95)"
+                                const mutedLight = "rgba(255,255,255,0.85)"
 
-export default function RecipeCard({ recipe }: RecipeCardProps) {
-    return (
-        <Card
-            style={{
-                width: "100%",
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                borderRadius: "20px",
-                overflow: "hidden",
-            }}
-        // bodyStyle={{
-        //     padding: 0,
-        // }}
-        >
-            {/* Recipe Title */}
-            <div
-                style={{
-                    padding: "1.5rem",
-                    paddingBottom: "1rem",
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-                }}
-            >
-                <Title
-                    level={2}
-                    style={{
-                        textAlign: "left",
-                        fontSize: "2rem",
-                        fontWeight: 700,
-                        color: "white",
-                        letterSpacing: "-0.05rem",
-                        lineHeight: 1.2,
-                        margin: 0,
-                    }}
-                >
-                    {recipe.title}
-                </Title>
-            </div>
+                                const cardStyle: React.CSSProperties = {
+                                    width: 700,
+                                    minHeight: 440,
+                                    backgroundColor: glassBg,
+                                    border: glassBorder,
+                                    backdropFilter: "blur(10px)",
+                                    boxShadow: '0 6px 18px rgba(7, 12, 20, 0.06)',
+                                    padding: 0,
+                                    borderRadius: "20px",
+                                    overflow: 'hidden',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                                }
 
-            {/* Image at the top */}
-            {recipe.imageUrl && (
-                <div
-                    style={{
-                        width: "100%",
-                        aspectRatio: "16/9",
-                        overflow: "hidden",
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Image
-                        src={recipe.imageUrl}
-                        alt={recipe.title}
-                        preview={false}
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                        }}
-                        fallback="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23ddd' width='400' height='300'/%3E%3Ctext fill='%23999' font-family='sans-serif' font-size='20' dy='10.5' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3ENo Image%3C/text%3E%3C/svg%3E"
-                    />
-                </div>
-            )}
+                                const coverContainer: React.CSSProperties = {
+                                    position: 'relative',
+                                    height: 220,
+                                    overflow: 'hidden',
+                                    backgroundColor: glassBg,
+                                    border: glassBorder,
+                                }
 
-            {/* Tags with icons below image */}
-            <div
-                style={{
-                    padding: "1.5rem",
-                    paddingBottom: "1rem",
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                <Space size="middle" wrap>
-                    {recipe.time && (
-                        <Tag
-                            icon={<ClockCircleOutlined />}
-                            style={{
-                                backgroundColor: "rgba(255, 255, 255, 0.15)",
-                                border: "1px solid rgba(255, 255, 255, 0.3)",
-                                color: "rgba(255, 255, 255, 0.9)",
-                                fontSize: "1rem",
-                                padding: "0.5rem 1rem",
-                                borderRadius: "8px",
-                            }}
-                        >
-                            {recipe.time}
-                        </Tag>
-                    )}
-                    {recipe.servings && (
-                        <Tag
-                            icon={<UserOutlined />}
-                            style={{
-                                backgroundColor: "rgba(255, 255, 255, 0.15)",
-                                border: "1px solid rgba(255, 255, 255, 0.3)",
-                                color: "rgba(255, 255, 255, 0.9)",
-                                fontSize: "1rem",
-                                padding: "0.5rem 1rem",
-                                borderRadius: "8px",
-                            }}
-                        >
-                            {recipe.servings} {typeof recipe.servings === "number" && recipe.servings === 1 ? "serving" : "servings"}
-                        </Tag>
-                    )}
-                </Space>
-            </div>
+                                const coverImageStyle: React.CSSProperties = {
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    display: 'block',
+                                    transition: 'transform 0.36s cubic-bezier(.2,.9,.2,1)',
+                                }
 
-            {/* Ingredients (left) and Instructions (right) */}
-            <Row
-                gutter={[24, 24]}
-                style={{
-                    padding: "1.5rem",
-                }}
-            >
-                {/* Ingredients - Left Column */}
-                <Col xs={24} md={12}>
-                    {recipe.ingredients && recipe.ingredients.length > 0 && (
-                        <div>
-                            <Title
-                                level={4}
-                                style={{
-                                    color: "white",
-                                    marginBottom: "1rem",
-                                    fontSize: "1.25rem",
+                                const overlayStyle: React.CSSProperties = {
+                                    position: 'absolute',
+                                    inset: 0,
+                                    background: 'rgba(0,0,0,0.46)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'flex-end',
+                                    padding: '16px 18px',
+                                    color: lightText,
+                                }
+
+                                const titleStyle: React.CSSProperties = {
+                                    margin: 0,
+                                    fontSize: 40,
+                                    fontWeight: 700,
+                                    letterSpacing: '-0.5px',
+                                    color: lightText,
+                                }
+
+                                const subtitleStyle: React.CSSProperties = {
+                                    marginTop: 0,
+                                    fontSize: 12,
+                                    opacity: 0.9,
+                                    color: mutedLight,
+                                }
+
+                                const pillsContainerStyle: React.CSSProperties = {
+                                    padding: '10px 18px',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    gap: 24,
+                                    alignItems: 'flex-start',
+                                    flexWrap: 'nowrap',
+                                    backgroundColor: glassBg,
+                                    border: glassBorder,
+                                    width: '100%',
+                                }
+
+                                const pillBlockStyle: React.CSSProperties = {
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 6,
+                                    alignItems: 'flex-start',
+                                }
+
+                                const pillTitleStyle: React.CSSProperties = {
+                                    fontSize: 13,
+                                    fontWeight: 700,
+                                    color: mutedLight,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.06em',
+                                }
+
+                                const pillStyle: React.CSSProperties = {
+                                    backgroundColor: glassBg,
+                                    border: glassBorder,
+                                    padding: '6px 12px',
+                                    borderRadius: 8,
                                     fontWeight: 600,
-                                }}
-                            >
-                                Ingredients
-                            </Title>
-                            <ul
-                                style={{
-                                    listStyle: "none",
+                                    fontSize: 16,
+                                    color: lightText,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 10,
+                                    whiteSpace: 'nowrap',
+                                    alignSelf: 'stretch',
+                                }
+
+                                // Layout colonne (Ingrédients puis Instructions)
+                                const bodyStyle: React.CSSProperties = {
+                                    padding: 18,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 18,
+                                    alignItems: 'stretch',
+                                }
+
+                                const leftColStyle: React.CSSProperties = {
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 10,
+                                    minWidth: 0,
+                                }
+
+                                const sectionTitleStyle: React.CSSProperties = {
+                                    fontSize: 18,
+                                    fontWeight: 700,
+                                    textTransform: 'uppercase',
+                                    color: lightText,
+                                    letterSpacing: '0.06em',
+                                }
+
+                                const ingredientListStyle: React.CSSProperties = {
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    gap: 8,
                                     padding: 0,
                                     margin: 0,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "0.75rem",
-                                }}
-                            >
-                                {recipe.ingredients.map((ingredient, index) => (
-                                    <li
-                                        key={index}
-                                        style={{
-                                            color: "rgba(255, 255, 255, 0.9)",
-                                            fontSize: "1rem",
-                                            lineHeight: 1.6,
-                                            paddingLeft: "1.5rem",
-                                            position: "relative",
-                                        }}
-                                    >
-                                        <span
-                                            style={{
-                                                position: "absolute",
-                                                left: 0,
-                                                top: "0.5rem",
-                                                width: "6px",
-                                                height: "6px",
-                                                borderRadius: "50%",
-                                                backgroundColor: "rgba(255, 255, 255, 0.6)",
-                                            }}
-                                        />
-                                        {ingredient}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </Col>
+                                }
 
-                {/* Instructions - Right Column */}
-                <Col xs={24} md={12}>
-                    {recipe.instructions && recipe.instructions.length > 0 && (
-                        <div>
-                            <Title
-                                level={4}
-                                style={{
-                                    color: "white",
-                                    marginBottom: "1rem",
-                                    fontSize: "1.25rem",
-                                    fontWeight: 600,
-                                }}
-                            >
-                                Instructions
-                            </Title>
-                            <ol
-                                style={{
-                                    listStyle: "none",
+                                const ingredientItemStyle: React.CSSProperties = {
+                                    listStyle: 'none',
+                                    fontSize: 18,
+                                    color: lightText,
+                                    backgroundColor: "rgba(255,255,255,0.04)",
+                                    border: "1px solid rgba(255,255,255,0.08)",
+                                    padding: '6px 10px',
+                                    borderRadius: 8,
+                                    maxWidth: '100%',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    boxShadow: '0 1px 0 rgba(16,24,40,0.02)',
+                                }
+
+                                const numberBadgeStyle: React.CSSProperties = {
+                                    width: 22,
+                                    height: 22,
+                                    borderRadius: 12,
+                                    backgroundColor: "rgba(255,255,255,0.08)",
+                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    color: lightText,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    flex: '0 0 22px',
+                                    boxShadow: '0 1px 0 rgba(0,0,0,0.15) inset',
+                                }
+
+                                const itemTextStyle: React.CSSProperties = {
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    display: 'block',
+                                    lineHeight: 1.4,
+                                }
+
+                                const instructionListStyle: React.CSSProperties = {
+                                    marginLeft: 4,
+                                    paddingLeft: 16,
+                                    fontSize: 20,
+                                    color: lightText,
+                                    lineHeight: 1.6,
+                                    maxHeight: 300,
+                                    overflowY: 'auto',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 8,
                                     padding: 0,
-                                    margin: 0,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "1rem",
-                                }}
-                            >
-                                {recipe.instructions.map((instruction, index) => (
-                                    <li
-                                        key={index}
-                                        style={{
-                                            color: "rgba(255, 255, 255, 0.9)",
-                                            fontSize: "1rem",
-                                            lineHeight: 1.6,
-                                            paddingLeft: "2.5rem",
-                                            position: "relative",
+                                }
+
+                                const instructionItemStyle: React.CSSProperties = {
+                                    marginBottom: 0,
+                                    listStyle: 'none',
+                                    display: 'flex',
+                                    alignItems: 'center', // centrer badge et texte verticalement
+                                    gap: 10,
+                                    padding: '6px 0',
+                                }
+
+                                return (
+                                    <Card
+                                        hoverable
+                                        bordered={false}
+                                        className={className}
+                                        bodyStyle={{ padding: 0 }}
+                                        style={cardStyle}
+                                        onMouseEnter={(e) => {
+                                            const img = (e.currentTarget.querySelector('img') as HTMLImageElement)
+                                            if (img) img.style.transform = 'scale(1.03)'
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            const img = (e.currentTarget.querySelector('img') as HTMLImageElement)
+                                            if (img) img.style.transform = 'scale(1)'
                                         }}
                                     >
-                                        <span
-                                            style={{
-                                                position: "absolute",
-                                                left: 0,
-                                                top: 0,
-                                                width: "28px",
-                                                height: "28px",
-                                                borderRadius: "50%",
-                                                backgroundColor: "rgba(255, 255, 255, 0.2)",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                fontSize: "0.9rem",
-                                                fontWeight: 600,
-                                                color: "white",
-                                            }}
-                                        >
-                                            {index + 1}
-                                        </span>
-                                        {instruction}
-                                    </li>
-                                ))}
-                            </ol>
-                        </div>
-                    )}
-                </Col>
-            </Row>
-        </Card>
-    );
-}
+                                        <div style={coverContainer}>
+                                            <img draggable={false} alt={title} src={imageUrl} style={coverImageStyle} />
+
+                                            <div style={overlayStyle}>
+                                                <h3 style={titleStyle}>{title}</h3>
+                                                <div style={subtitleStyle}>{description}</div>
+                                            </div>
+                                        </div>
+
+                                        <div style={pillsContainerStyle}>
+                                            <div style={pillBlockStyle}>
+                                                <div style={pillTitleStyle}>Portions</div>
+                                                <div style={pillStyle}>
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ verticalAlign: 'middle', color: mutedLight }}>
+                                                        <circle cx="12" cy="12" r="6" stroke={mutedLight} strokeWidth="1.25" />
+                                                        <path d="M8 12h8" stroke={mutedLight} strokeWidth="1.25" strokeLinecap="round" />
+                                                    </svg>
+                                                    <span style={{ verticalAlign: 'middle' }}>{servings} portions</span>
+                                                </div>
+                                            </div>
+
+                                            <div style={pillBlockStyle}>
+                                                <div style={pillTitleStyle}>Temps</div>
+                                                <div style={pillStyle}>
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ verticalAlign: 'middle', color: mutedLight }}>
+                                                        <path d="M12 7v6l4 2" stroke={mutedLight} strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke={mutedLight} strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                    <span style={{ verticalAlign: 'middle' }}>{time}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style={bodyStyle}>
+                                            <div style={leftColStyle}>
+                                                <div style={sectionTitleStyle}>Ingrédients</div>
+                                                <ul style={ingredientListStyle}>
+                                                    {Array.isArray(ingredients) && ingredients.length > 0 ? (
+                                                        ingredients.map((ing, i) => (
+                                                            <li key={i} style={ingredientItemStyle}>
+                                                                <span style={itemTextStyle}>{ing}</span>
+                                                            </li>
+                                                        ))
+                                                    ) : (
+                                                        <li style={{ fontSize: 14, color: mutedLight }}>Aucun ingrédient</li>
+                                                    )}
+                                                </ul>
+
+                                                <div style={{ height: 8 }} />
+
+                                                <div style={sectionTitleStyle}>Instructions</div>
+                                                <ol style={instructionListStyle}>
+                                                    {Array.isArray(instructions) && instructions.length > 0 ? (
+                                                        instructions.map((step, i) => (
+                                                            <li key={i} style={instructionItemStyle}>
+                                                                <span style={numberBadgeStyle} aria-hidden>{i + 1}</span>
+                                                                <span style={itemTextStyle}>{step}</span>
+                                                            </li>
+                                                        ))
+                                                    ) : (
+                                                        <li style={{ fontSize: 18, color: mutedLight }}>Aucune instruction</li>
+                                                    )}
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                )
+                            }
