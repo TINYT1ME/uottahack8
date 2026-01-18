@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Typography } from "antd";
-import { ReactNode, useState } from "react";
+import { ReactNode, cloneElement, isValidElement } from "react";
 
 const { Text } = Typography;
 
@@ -9,14 +9,19 @@ interface ArchetypeCardProps {
     icon: ReactNode;
     name: string;
     preferences: string[];
+    isSelected?: boolean;
+    onClick?: () => void;
 }
 
-export default function ArchetypeCard({ icon, name, preferences }: ArchetypeCardProps) {
-    const [isSelected, setIsSelected] = useState(false);
-
+export default function ArchetypeCard({ icon, name, preferences, isSelected = false, onClick }: ArchetypeCardProps) {
     const handleClick = () => {
-        setIsSelected(!isSelected);
+        onClick?.();
     };
+
+    // Clone icon and pass size prop if it's a React element that accepts size
+    const iconWithSize = isValidElement(icon) && icon.props?.size === undefined
+        ? cloneElement(icon as React.ReactElement<any>, { size: 56 })
+        : icon;
 
     return (
         <Card
@@ -66,15 +71,19 @@ export default function ArchetypeCard({ icon, name, preferences }: ArchetypeCard
             {/* Icon */}
             <div
                 style={{
-                    fontSize: "2.5rem",
+                    fontSize: "3.5rem",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     color: isSelected ? "rgba(76, 175, 80, 1)" : "white",
                     transition: "color 0.3s ease",
+                    maxWidth: "64px",
+                    maxHeight: "64px",
+                    width: "100%",
+                    height: "100%",
                 }}
             >
-                {icon}
+                {iconWithSize}
             </div>
 
             {/* Name */}
@@ -94,11 +103,9 @@ export default function ArchetypeCard({ icon, name, preferences }: ArchetypeCard
             <ul
                 style={{
                     listStyle: "none",
-                    padding: 0,
-                    margin: 0,
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.5rem",
+                    gap: "0.2rem",
                     width: "100%",
                     flex: 1,
                     justifyContent: "flex-start",

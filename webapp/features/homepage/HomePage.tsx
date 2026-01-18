@@ -21,11 +21,22 @@ export default function HomePage() {
     const recipe: Recipe = {
       title: "Chicken Parmesan",
       description: "Recipe Description",
-      ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
-      instructions: ["Instruction 1", "Instruction 2", "Instruction 3"],
+      ingredients: ["2 1/2 pounds chicken legs", "3/4 cup honey", "1/2 cup soy sauce", "1/4 cup ketchup", "2 cloves garlic"],
+      instructions: [
+        "Preheat oven to 350°F and line pan with foil.",
+        "Arrange chicken legs in pan.",
+        "Mix sauce ingredients.",
+        "Pour sauce over chicken.",
+        "Bake 45 minutes.",
+        "Flip chicken.",
+        "Increase oven to 425°F.",
+        "Bake 15 minutes until caramelized.",
+        "Rest 5 minutes.",
+        "Serve with sauce."
+      ],
       servings: 4,
       time: "30 minutes",
-      imageUrl: "https://picsum.photos/500",
+      imageUrl: "https://imgs.search.brave.com/aIuHhKNxYWaj412cwIIFhRX8MBwnGQL4TF_6eVJ1vSg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dmluY2Vuem9zcGxh/dGUuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIxLzEwLzYx/MHgzNTAtUGhvdG8t/M184NTctSG93LXRv/LU1ha2UtQ0hJQ0tF/Ti1QQVJNSUdJQU5B/LUxpa2UtYW4tSXRh/bGlhbi1WMS5qcGc",
       sourceUrl: "",
     };
 

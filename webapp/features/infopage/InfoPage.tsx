@@ -7,14 +7,9 @@ import { Recipe } from "@/types/types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ArchetypeCard from "./components/ArchetypeCard";
-import {
-    UserOutlined,
-    HeartOutlined,
-    FireOutlined,
-    ThunderboltOutlined,
-    AppleOutlined,
-    CoffeeOutlined,
-} from "@ant-design/icons";
+
+import { GlutenFreeIcon, GymBroIcon, HalalIcon, KetoIcon, VeganIcon, LowSugarIcon } from "./icons";
+
 
 interface Archetype {
     icon: React.ReactNode;
@@ -24,42 +19,44 @@ interface Archetype {
 
 const archetypes: Archetype[] = [
     {
-        icon: <UserOutlined />,
+        icon: <VeganIcon />,
         name: "Vegan",
         preferences: ["Plant-based", "No dairy", "No eggs"],
     },
     {
-        icon: <HeartOutlined />,
-        name: "Healthy",
+        icon: <GymBroIcon />,
+        name: "Gym Bro",
         preferences: ["Low calorie", "High protein", "Nutritious"],
     },
     {
-        icon: <FireOutlined />,
-        name: "Spicy",
-        preferences: ["Hot peppers", "Bold flavors", "Heat"],
+        icon: <KetoIcon />,
+        name: "Keto",
+        preferences: ["High fat", "Low carb", "No sugar"],
     },
     {
-        icon: <ThunderboltOutlined />,
-        name: "Quick",
-        preferences: ["Fast prep", "30 min or less", "Simple"],
+        icon: <GlutenFreeIcon />,
+        name: "Gluten-Free",
+        preferences: ["No gluten", "No wheat", "No barley"],
     },
     {
-        icon: <AppleOutlined />,
-        name: "Fresh",
-        preferences: ["Seasonal", "Organic", "Farm-to-table"],
+        icon: <LowSugarIcon />,
+        name: "Low sugar",
+        preferences: ["Less sugar", "Sweetener substitues", "Diabetic Friendly"],
     },
     {
-        icon: <CoffeeOutlined />,
-        name: "Comfort",
-        preferences: ["Hearty", "Warming", "Satisfying"],
+        icon: <HalalIcon />,
+        name: "Halal",
+        preferences: ["No pork", "No alcohol", "No shellfish"],
     },
 ];
 
 export default function InfoPage() {
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [loading, setLoading] = useState(true);
+    const [modifying, setModifying] = useState(false);
     const [customInputs, setCustomInputs] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
+    const [selectedArchetypes, setSelectedArchetypes] = useState<Set<number>>(new Set());
     const router = useRouter();
 
     useEffect(() => {
@@ -90,11 +87,77 @@ export default function InfoPage() {
         }
     };
 
+    const handleArchetypeToggle = (index: number) => {
+        setSelectedArchetypes((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(index)) {
+                newSet.delete(index);
+            } else {
+                newSet.add(index);
+            }
+            return newSet;
+        });
+    };
+
+
     // Call llm here
-    const handleModifyRecipe = () => {
-        // TODO: Implement recipe modification logic
+    const handleModifyRecipe = async () => {
+        if (!recipe) return;
+
         console.log("Modify recipe clicked");
         console.log("Custom inputs:", customInputs);
+        const selectedArchetypeNames = Array.from(selectedArchetypes).map(
+            (index) => archetypes[index].name
+        );
+        console.log("Selected archetypes:", selectedArchetypeNames);
+
+        // Merge archetype names with custom inputs
+        const allPreferences = [...selectedArchetypeNames, ...customInputs];
+
+        if (allPreferences.length === 0) {
+            console.log("No preferences selected");
+            return;
+        }
+
+        setModifying(true);
+        try {
+            const response = await fetch("/api/modify-recipe", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    recipe: recipe,
+                    preferences: allPreferences,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to modify recipe");
+            }
+
+            const modifiedRecipe = await response.json();
+
+            // Transform the response to match Recipe type
+            const transformedRecipe: Recipe = {
+                imageUrl: modifiedRecipe.imageUrl || recipe.imageUrl,
+                title: modifiedRecipe.recipe_name || modifiedRecipe.title || recipe.title,
+                description: modifiedRecipe.description || recipe.description,
+                ingredients: modifiedRecipe.ingredients || recipe.ingredients,
+                instructions: modifiedRecipe.instructions || recipe.instructions,
+                servings: modifiedRecipe.servings || recipe.servings,
+                time: modifiedRecipe.time || recipe.time,
+                sourceUrl: modifiedRecipe.sourceUrl || recipe.sourceUrl,
+            };
+
+            setRecipe(transformedRecipe);
+            console.log("Recipe modified successfully:", transformedRecipe);
+        } catch (error) {
+            console.error("Error modifying recipe:", error);
+            // Optionally show an error message to the user
+        } finally {
+            setModifying(false);
+        }
     };
 
     if (loading || !recipe) {
@@ -211,6 +274,8 @@ export default function InfoPage() {
                                     icon={archetype.icon}
                                     name={archetype.name}
                                     preferences={archetype.preferences}
+                                    isSelected={selectedArchetypes.has(index)}
+                                    onClick={() => handleArchetypeToggle(index)}
                                 />
                             ))}
                         </div>
@@ -274,6 +339,8 @@ export default function InfoPage() {
                             type="primary"
                             onClick={handleModifyRecipe}
                             size="large"
+                            loading={modifying}
+                            disabled={modifying}
                             style={{
                                 backgroundColor: "rgba(76, 175, 80, 0.8)",
                                 border: "none",
@@ -285,15 +352,19 @@ export default function InfoPage() {
                                 transition: "all 0.3s ease",
                             }}
                             onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = "rgba(76, 175, 80, 1)";
-                                e.currentTarget.style.transform = "scale(1.02)";
+                                if (!modifying) {
+                                    e.currentTarget.style.backgroundColor = "rgba(76, 175, 80, 1)";
+                                    e.currentTarget.style.transform = "scale(1.02)";
+                                }
                             }}
                             onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = "rgba(76, 175, 80, 0.8)";
-                                e.currentTarget.style.transform = "scale(1)";
+                                if (!modifying) {
+                                    e.currentTarget.style.backgroundColor = "rgba(76, 175, 80, 0.8)";
+                                    e.currentTarget.style.transform = "scale(1)";
+                                }
                             }}
                         >
-                            Modify Recipe
+                            {modifying ? "Modifying..." : "Modify Recipe"}
                         </Button>
                     </Flex>
                 </Col>
