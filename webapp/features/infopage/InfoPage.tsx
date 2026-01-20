@@ -176,6 +176,8 @@ export default function InfoPage() {
             console.error("Error modifying recipe:", error);
             // Optionally show an error message to the user
         } finally {
+            // wait for 4 seconds
+            await new Promise(resolve => setTimeout(resolve, 4000));
             setModifying(false);
         }
     };
